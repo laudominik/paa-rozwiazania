@@ -613,6 +613,13 @@ złożoność O(1) \\\\
 $M_W(n) = \theta(n)$ \\
 $M_C(n) = \Omega(m) \cap O(n^2)$
 
+\section{$\alpha$-redukcja}
+\subsection*{klika o rozmiarze $\leq$ k}
+Mamy algorytm, który odpowiada na pytanie, czy graf G zawiera klikę $\leq$ k jeśli G ma gwiazdę spinającą.
+Jak wykorzystać ten algorytm dla grafu, który nie ma gwiazdy spinającej? \\\\rozwiązanie:\\
+Chcemy się dowiedzieć, czy graf ma klikę $\leq$ k. \\
+Dokładamy do G gwiazdę spinającą, następnie pytamy o to, czy powstały graf ma klikę $\leq$ k-1.
+
 \section{Dowody grafowe}
 
 \subsection*{Tw. Eulera}
@@ -702,7 +709,7 @@ def vertexcover(G,k)
 	\item podaj typy grafów i wartości k, dla których vertexcover zwraca false w czasie wykładniczym
 \end{enumerate}
 
-\subsection*{MFP*}
+\subsection*{MFP}
 W historii problemu maksymalnego przepływu znane są m.in.  następujące algorytmy:\\
 (1969) Edmondsa-Karpa \\
 (1970) Dinica \\
@@ -715,15 +722,7 @@ W historii problemu maksymalnego przepływu znane są m.in.  następujące algor
 (2013) Orlina \\
 o złożonościach $O(nm)$, $O(nmlog(n^2/m)),$ $O(nmlogn)$, $O(nmlog^2n)$, $O(n^{5/3}m^{2/3})$, $O(n^2\sqrt m)$, $O(n^3)$, $O(n^2m)$, $O(nm^2)$ \\
 przyporządkuj złożoności do odpowiednich algorytmów \\\\ rozwiązanie: \\
-(1969) Edmondsa-Karpa $O(nm^2)$ \\
-(1970) Dinica $O(n^2m)$ \\
-(1974) Karzanova $O(n^3)$\\
-(1977) Cherkaskyego   $O(n^2 \sqrt(m))$ \\
-(1978) Galila $O(n^{5/3}m^{2/3})$\\
-(1978) Shiloacha$O(nmlog^2n)$ \\
-(1980) Sleatora-Tarjana $O(nmlogn)$\\
-(1986) Goldberga-Tarjana $O(nmlog(\frac{n^2}{m}))$\\
-(2013) Orlina $O(nm)$\\
+trzeba rozpatrzeć dwa przypadki: 1. grafy rzadkie, 2. grafy gęste i średnio gęste
 
 \subsection*{Listowa reprezentacja drzew n-wierzchołkowych}
 Zaproponuj listowy sposób reprezentacji drzew n-wierzchołkowych w pamięci O(n) umożliwiający sprawdzanie O(1), 
