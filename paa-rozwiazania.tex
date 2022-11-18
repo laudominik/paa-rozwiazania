@@ -266,6 +266,163 @@ def f(n):
 \end{lstlisting}
 $O(1)$ ??
 
+\subsection*{Hybryda}
+
+Oszacuj liczbę kroków poniższego algorytmu liczącego wartość n-tego wyrazu ciągu fibonacciego. 
+Określ, czy złożoność jest wielomianowa, superwielomianowa,  wykładnicza, superwykładnicza
+\begin{lstlisting}
+def hybryda(n):
+	if n < 9:
+		if n <= 2:
+			return 1
+		return hybryda(n-1) + hybryda(n-2)
+	else:
+		a = b = 1
+		for i = 3 to n:
+			b = b + a
+			a = b - a
+		return b
+\end{lstlisting}
+rozwiązanie: \\
+nie obchodzi nas n<9 \\
+LK(n) = O(n) \\
+ZO(r) = O($2^r$) - złożoność jest wykładnicza
+
+
+\subsection*{Hanoi}
+Pewien komputer wykonuje milion operacji przenieś z poniższego algorytmu w ciągu sekundy. Dla jakich wartości n będzie on pracował
+\begin{enumerate}
+	\item minutę
+	\item godzinę
+	\item rok
+\end{enumerate}
+\begin{lstlisting}
+def X(A,B,C,n):
+	if n == 1:
+		przenies(A,C)
+	else:
+		X(A,C,B,n-1)
+		przenies(A,c)
+		X(B,A,C,n-1)
+\end{lstlisting}
+rozwiązanie: \\
+T(n) = 2T(n-1) + 1 = $\theta(2^n)$ \\
+1. \\
+1 000 000 * 60 = $2^n$ \\
+$n = lg(1 000 000 * 60)$ \\\\
+2.\\
+$n = lg(1 000 000 * 60 * 60)$ \\\\
+3.\\
+$n = lg(1 000 000 * 60 * 60 * 24 * 365)$ 
+
+\subsection*{Złożoność czasowa}
+Pewien algorytm A ma złożonośc czasową $\theta(n^2)$. Określ prawdziwość zdań:
+\begin{enumerate}
+	\item Istnieją stałe $c_1, c_2$ takie, że dla wszystkich n czas działania A jest krótszy niż $c_1n^2 + c_2$ sekund
+	\item Istnieją stałe $c_1, c_2$ takie, że dla wszystkich n czas działania A jest dłuższy niż $c_1n^2 + c_2$ sekund
+	\item Istnieją stałe $c_1, c_2, c_3$ takie, że dla wszystkich n czas działania A jest równy $c_1n^2 + c_2nlogn -c_3n$ sekund
+	\item dla każdego n istnieje zestaw danych rozmiaru n, dla którego czas działania A jest mniejszy niż $n^{1,9}$ sekund
+	\item dla każdego n istnieje zestaw danych rozmiaru n, dla którego czas działania A jest mniejszy niż $n^{2,1}$ sekund
+	\item dla każdego n istnieje zestaw danych rozmiaru n, dla którego czas działania A jest większy niż $n^{1,9}$ sekund
+	\item dla każdego n istnieje zestaw danych rozmiaru n, dla którego czas działania A jest większy niż $n^{2,1}$ sekund
+	\item dla pewnych n czas działania A jest równy $2^n$ sekund
+\end{enumerate}
+rozwiązanie:\\
+
+\begin{enumerate}
+	\item prawda
+	\item prawda
+	\item fałsz
+	\item fałsz
+	\item prawda
+	\item prawda
+	\item fałsz
+	\item fałsz
+\end{enumerate}
+
+\subsection*{Złożoność pesymistyczna}
+Algorytm A ma złożoność f(n), algorytm B ma złożoność g(n). Czy to prawda, że (tak,nie, nie wiadomo):
+\begin{enumerate}
+	\item Czy w najgorszym przypadku B jest asymptotycznie szybszy od A, jeśli g(n) = $\Omega(f(n)logn)$
+	\item Czy w najgorszym przypadku B jest asymptotycznie szybszy od A, jeśli g(n) = $O(f(n)logn)$
+	\item Czy w najgorszym przypadku B jest asymptotycznie szybszy od A, jeśli g(n) = $\theta(f(n)logn)$
+	\item Czy w najgorszym przypadku B jest asymptotycznie szybszy od A, jeśli g(n) = $\tilde\theta(f(n))$
+	\item Czy w najgorszym przypadku A jest asymptotycznie szybszy od B, jeśli g(n) = $o(f(n)logn)$
+	\item Czy w najgorszym przypadku A jest asymptotycznie szybszy od B, jeśli g(n) = $\omega(f(n)logn)$
+\end{enumerate}
+rozwiązanie: \\
+\begin{enumerate}
+	\item nie
+	\item nie wiadomo
+	\item nie
+	\item nie
+	\item nie wiadomo
+	\item tak
+\end{enumerate}
+
+\subsection*{dwie funkcje}
+
+Określ funkcję f jako liniową, wielomianową, superwielomianową, wykładniczą lub superwykładniczą oraz oszacuj jej złożoność.
+\begin{lstlisting}
+def f(n):
+	if n < 3:
+		return n
+	return f(n-2) + 2 * g(n)
+	
+def g(n):
+	if n < 3:
+		return n
+	return 2f(n-2) + g(n / 3)
+\end{lstlisting}
+rozwiązanie: \\
+$T_f(n) = T_f(n-2) + T_g(n) + 1 = 3T_f(n-2) + T_g(n/3)$ \\
+$3T_f(n-2) + 1 \leq T_f(n) \leq 4T_f(n-2) + 1$ \\
+$T_f(n) = \Omega((\sqrt 3)^n) \cap O(2^n)$ - liczba kroków \\
+$T_f(r) = \Omega((\sqrt 3)^{2^n}) \cap O(2^{2^n})$ - złożoność obliczeniowa (jest to złożoność superwykładnicza)
+
+\subsection*{Funkcja Padovana}
+Funkcja Padovana zdefiniowana jest następująco $P(0) = P(1) = P(2) = 1$,  $P(n) = P(n-2) + P(n-3)$.  
+Oszacuj tempo wzrostu funkcji P(n). Znajdź jak najlepsze oszacowanie.  \\\\rozwiązanie: \\
+Proste oszacowanie $P(n) = \Omega((\sqrt[3] 2)^n) \cap O((\sqrt 2)^n)$ \\
+Korzystając z własności funkcji Padovana: $\frac{P(n-2)}{P(n-3)} \leq \frac{4}{3}$ \\
+otrzymujemy $P(n) = \Omega((\sqrt \frac{7}{4})^n) \cap O((\sqrt[3]{ \frac{7}{3}} )^n)$
+
+\subsection*{Mediana}
+Dany jest ciąg n liczb naturalnych z przedziału [1 ... 10n]. Napisz algorytm znajdujący medianę, czyli (n+1)/2 największy element ciągu. \\\\rozwiązanie:\\
+\begin{lstlisting}
+def mediana(A[1..n]):
+	posortuj_przez_zliczanie(A) // potrzeba nam tablicy 
+	return A[(n+1)/2]
+\end{lstlisting}
+
+złożoność obliczniowa O(n), pamięciowa O(n)
+
+\subsection*{Własności NWD}
+Mamy dane własności NWD:
+\begin{itemize}
+	\item NWD(a,b) = 2NWD(a/2, b/2) jeśli a,b parzyste
+	\item NWD(a,b/2) jeśli a - nieparzyste, b -parzyste
+	\item NWD((a-b)/2, b) jeśli a i b nieparzyste
+\end{itemize}
+napisz algorytm wykorzystujący te własności do obliczenia NWD i oszacuj jego złożoność obliczeniową. \\\\rozwiązanie:\\
+
+\begin{lstlisting}
+def NWD(a,b):
+	if a == 0:
+		return b
+	if b == 0:
+		return a	
+
+	if even(a) and even(b):
+		return 2 * NWD(a/2, b/2)
+	if odd(a) and even(b):
+		return NWD(a,b/2)
+	return NWD((a-b)/2, b)
+\end{lstlisting}
+even sprowadza się do sprawdzenia jednego bitu \\
+złożoność obliczeniowa: T(r) = T(r-1) + 1 = O(r) gdzie r- liczba cyfr a i b 
+
+
 \subsection*{Zagadka 1}
 \begin{lstlisting}
 def z(A[1..n])
@@ -372,6 +529,34 @@ def z(n):
 rozwiązanie: \\\\
 $T(n) = \theta(n^3)$ - liczba kroków\\
 $T(r) = \theta(2^{3r})$ - złożoność obliczeniowa
+
+\subsection*{Zagadka 7}
+Co wylicza poniższa funkcja,  podaj jej liczbę kroków i złożoność obliczeniową.
+
+\begin{lstlisting}
+def f(n):
+	if n == 0 or n == 1:
+		return 1
+	return f(n-1) - f(n-2)
+\end{lstlisting}
+rozwiązanie:\\
+wartości funkcji tworzą ciąg postaci (1,1,0,-1,-1,0,1,1,0,...) \\
+liczba kroków: $T(n) = T(n-1) + T(n-2) = \theta(\phi^n)$ \\
+złożoność obliczeniowa: $T(r) = \theta(\phi^{2^r})$
+
+\subsection*{Zagadka 8}
+Podaj liczbę kroków funkcji
+\begin{lstlisting}
+def z(n):
+	L = 0
+	for i = 1 to n * n:
+		for j = i to n:
+			for k = 1 to n * n mod 100:
+				L = L + 1
+\end{lstlisting}
+rozwiązanie: \\
+wewnętrzna pętla wykonuje się $O(1)$ \\
+$T(n) = \theta(n^2)$
 
 \section{struktury danych}
 \subsection*{LSAP*}
@@ -548,7 +733,7 @@ Algorytm ma złożoność $O(n)$, bo dowolnysasiad(v1) działa w czasie $O(n)$. 
 sąsiedztwa reprezentującej graf są danymi istotnymi dla wyniku.
 
 \subsection*{Nierówności trójkąta}
-Dany jest zbiór n liczb. Sprawdź czy w tym zbiorze są takie 3, które mogą być długościami boków trójkąta. Algorytm powinien mieć złożoność $o(n)$. \\\\rozwiązanie:\\
+Dany jest zbiór n liczb. Sprawdź czy w tym zbiorze są takie 3, które mogą być długościami boków trójkąta. Algorytm powinien mieć złożoność $o(n^2)$. \\\\rozwiązanie:\\
 \begin{lstlisting}
 def triangle_inequality(A[1..n]):
 	A = sort(A)
@@ -612,6 +797,57 @@ złożoność O(1) \\\\
 2)\\
 $M_W(n) = \theta(n)$ \\
 $M_C(n) = \Omega(m) \cap O(n^2)$
+
+\subsection*{Znajdowanie drogi długości k}
+Posortuj złożoności malejąco dla algorytmu znajdowania drogi długości k w nieobciążonym grafie n-wierzchołkowym. \\
+$O(4^k n^{O(1)})$, $O(k! n^{O(1)})$, $O(1,66^k n^{O(1)})$, $O((2e)^k n^{O(1)})$, $O(1,66^n n^{O(1)})$, $O(2^{3k/2} n^{O(1)})$, $O(2^k n^{O(1)})$ \\\\rozwiązanie:\\
+ograniczenie górne na $k$: $k \leq n-1$ \\
+$O(k! n^{O(1)})$, $O((2e)^k n^{O(1)})$, $O(4^k n^{O(1)})$, $O(2^{3k/2} n^{O(1)})$, $O(2^k n^{O(1)})$,  $O(1,66^n n^{O(1)})$, $O(1,66^k n^{O(1)})$
+
+
+\subsection*{LGS}
+Naszkicuj program lgs zwracający liczbę gwiazd spinających zawartych w G. Oszacuj jego złożoność w zależności od m i n 
+dla macierzy sąsiedztwa, listy sąsiedztwa, pęków wyjściowych. \\\\rozwiązanie:\\
+
+\begin{lstlisting}
+def lgs(G):
+	l = 0
+	for v in G:
+		if |N(v)| = n-1:
+			l += 1
+	return l
+\end{lstlisting}
+dla macierzy sąsiedztwa $O(n^2)$, dla listy sąsiedztwa $O(n + m)$, dla pęków $O(n)$
+
+\subsection*{Cykl}
+Napisz program, który stwierdza, czy graf G zapisany w macierzy sąsiedztwa wierzchołków jest cyklem i oszacuj jego złożoność obliczeniową. \\\\rozwiązanie:\\
+\begin{lstlisting}
+def is_cycle(G[1..n][1..n]):
+	odwiedzone = tablica[1..n]
+	licznik_odwiedzone = 0
+	wyzeruj(odwiedzone)
+	obecny_wierzcholek = 1
+	while licznik_odwiedzone != n:
+		odwiedzone[obecny_wierzcholek] = 1
+		licznik_odwiedzone += 1
+		licznik_odwiedzone = 
+		licznik_sasiadow = 0
+		do_odwiedzenia = -1
+		for i = 1 to n:
+			if B(obecny_wierzcholek, i):
+				licznik_sasiadow += 1
+				if not odwiedzone[i]:
+					do_odwiedzenia = i
+
+		if B(obecny_wierzcholek, 0) and licznik_odwiedzone = n:
+			return true
+		if do_odwiedzenia = -1:
+			return false
+		if licznik_sasiadow != 2:
+			return false
+	
+	return false 
+\end{lstlisting}
 
 \section{$\alpha$-redukcja}
 \subsection*{klika o rozmiarze $\leq$ k}
