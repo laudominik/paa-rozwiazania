@@ -337,7 +337,7 @@ rozwiązanie:\\
 	\item prawda
 	\item prawda
 	\item fałsz
-	\item fałsz
+	\item prawda
 \end{enumerate}
 
 \subsection*{Złożoność pesymistyczna}
@@ -557,6 +557,24 @@ def z(n):
 rozwiązanie: \\
 wewnętrzna pętla wykonuje się $O(1)$ \\
 $T(n) = \theta(n^2)$
+
+\subsection*{Zagadka 9***}
+Podaj liczbę kroków i złożonośc obliczeniową poniższej funkcji, znajdź jak najlepsze oszacowanie (!).
+\begin{lstlisting}
+def Fibonacci(n):
+	if i <= 2:
+		return 1
+
+	for i = 1 to 2^n / n^2:
+		pass
+	
+	return Fibonacci(n-1) + Fibonacci(n-2)
+
+\end{lstlisting}
+rozwiązanie: \\
+$T(n) = T(n-1) + T(n-2) + \frac{2^n}{n} \leq 2T(n-1) + \frac{2^n}{n} = O(n2^n)$ \\
+$T(r) = O(2^r * 2^{2^r})$ \\
+lepsze oszacowanie: $T(n) = T(n-1) + T(n-2) + \frac{2^n}{n} \leq ... + 2^n(\frac{1}{n} + \frac{1}{n-1} + \frac{1}{n-2} + ... + 1) \leq 2^n ln(n) \rightarrow T(n) = O(log(n) 2^n)$ 
 
 \section{struktury danych}
 \subsection*{LSAP*}
