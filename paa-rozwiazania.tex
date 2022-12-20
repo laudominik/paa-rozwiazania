@@ -732,24 +732,6 @@ inne rozwiązanie:\\\\
 każdą sferę można zrzutować na płaszczyznę z wyjątkiem jednego punktu (bieguna)
 
 
-
-\subsection*{Znajdowanie klik w grafie kubicznym}
-Zaprojektuj algorytm 1-absolutnie aproksymacyjny znajdujący największą klikę w n-wierzchołkowym grafie kubicznym. Algorytm powinien mieć złożoność $O(n)$ \\\\rozwiązanie:\\
-Algorytm k-absolutnie aproksymacyjny -> algorytm taki, że dla danych I, gdzie OPT(I) - optymalny wynik, mamy $|A(I) - OPT(I)| \leq 1$, czyli musimy znaleźć algorytm, 
-który będzie mógł się pomylić o 1 w zwracaniu rozmiaru kliki. Oto on:
-
-\begin{lstlisting}
-def clique(G):
-	if n == 4:
-		return {v1, v2, v3, v4}
-	else:
-		u = dowolnysasiad(v1)
-		return {v1, u}
-\end{lstlisting}
-Czyli algorytm zwraca klikę $K_4$ lub $K_2$,  możliwe jest, że w grafie występuje $K_3$ ale chcemy stworzyć algorytm aproksymacyjny, więc możemy się pomylić o 1.
-Algorytm ma złożoność $O(n)$, bo dowolnysasiad(v1) działa w czasie $O(n)$. Algorytm ma złożoność mniejszą niż złożoność pamięciowa, bo niewszystkie dane w macierzy 
-sąsiedztwa reprezentującej graf są danymi istotnymi dla wyniku.
-
 \subsection*{Nierówności trójkąta}
 Dany jest zbiór n liczb. Sprawdź czy w tym zbiorze są takie 3, które mogą być długościami boków trójkąta. Algorytm powinien mieć złożoność $o(n^2)$. \\\\rozwiązanie:\\
 \begin{lstlisting}
@@ -867,12 +849,141 @@ def is_cycle(G[1..n][1..n]):
 	return false 
 \end{lstlisting}
 
-\section{$\alpha$-redukcja}
+\subsection*{Mnożenie hybrydowe macierzy}
+Załóżmy, że mamy dwa algorytmy mnożenia macierzy,  pierwszy wykonuje 22 mnożenia na macierzach 3x3, drugi 99 mnożeń na macierzach 5x5, którym algorytmem 
+najlepiej jest pomnożyć macierze 15x15. \\\\Rozwiązanie: \\
+Najlepiej użyć metody hybrydowej, najpierw rozbijamy macierz na 3x3 macierzy 5x5, mnożymy pierwszym algorytmem a potem drugim, czyli mamy $22 * 99$ mnożeń.
+
+\section{Problemy}
 \subsection*{klika o rozmiarze $\leq$ k}
 Mamy algorytm, który odpowiada na pytanie, czy graf G zawiera klikę $\leq$ k jeśli G ma gwiazdę spinającą.
 Jak wykorzystać ten algorytm dla grafu, który nie ma gwiazdy spinającej? \\\\rozwiązanie:\\
 Chcemy się dowiedzieć, czy graf ma klikę $\leq$ k. \\
 Dokładamy do G gwiazdę spinającą, następnie pytamy o to, czy powstały graf ma klikę $\leq$ k-1.
+
+\subsection*{KLIKA $\in$ NPC}
+Udowodnij, że KLIKA $\in$ NPC. Użyj problemu CNF-SAT. \\\\
+rozwiązanie:\\
+1)\\
+KLIKA $\in$ NP - mając dowolny podgraf n$_1$ wierzchołkowy w czasie n$_1^2$ jesteśmy w stanie sprawdzić, czy jest kliką\\\\
+2)\\
+T: CNF-SAT $\alpha$ KLIKA \\
+D: \\
+budujemy graf G
+\begin{itemize}
+	\item jego wierzchołki to zmienne należące do poszczególnych klauzul formuły
+	\item wierzchołki w obrębie jednej klauzuli są niezależne
+	\item zmienne zanegowane występujące w różnych formułach (czyli np. $x, \neg x$) są niezależne między sobą
+	\item pozostałe wierzchołki połączone są krawędziami
+\end{itemize}
+CNF-SAT(formuła) = KLIKA(G,Nklauzul) \\\\
+(a) jeśli formuła nie jest spełnialna, czyli CNF-SAT(formuła) = NIE, to znaczy, że w grafie G nie ma kliki łączącej 
+wszystkie klauzule-podzbiory, bo gdyby była, to dla pewnego wartościowania 0,1 wierzchołków do niej należących
+wartościowanie formuły wynosiłoby 1 co jest sprzeczne z założeniem,  a zatem KLIKA(formuła, Nklauzul) = NIE \\
+(b) jeśli formuła jest spełnialna, czyli CNF-SAT(formuła) = TAK, to znaczy, że w grafie G wszystkie wierzchołki należące
+do odpowiedniego wartościowania są ze sobą połączone i stanowią klikę, a zatem KLIKA(formuła, Nklauzul) = TAK
+
+\subsection*{PW $\in$ NPC}
+Udowodnij, że PW (Pokrycie wierzchołkowe) $\in$ NPC. Użyj problemu KLIKA. \\\\
+rozwiązanie:\\
+1)\\
+PW $\in $ NP - mając dowolny $S \subseteq V$ w czasie wielomianowym 
+jesteśmy w stanie sprawdzić, czy jest pokryciem wierzchołkowym - lecimy po krawędziach i sprawdzdamy
+czy dla $\{v, w\}$ $v$ lub $w$ $\in S$, jeśli tak dla każdej krawędzi, to S jest pokryciem wierzchołkowym, 
+w przeciwnym wypadku nim nie jest \\\\
+2)\\
+T: KLIKA $\alpha$ PW\\
+D: \\
+KLIKA(G,k) = PW(G', n-k) \\
+(a) jeśli G ma klikę k-elementową (KLIKA(G, k) = TAK), to jego dopełnienie ma 
+k-elementowy zbiór wierzchołków niezależnych, zatem żeby pokryć wszystkie krawędzie w najgorszym 
+wypadku będziemy musieli w pokryciu umieścić wszystkie pozostałe wierzchołki (poza tymi niezależnymi)
+czyli PW(G', n-k) = TAK \\
+(b) jeśli G nie ma kliki k-elementowej (KLIKA(G, k) = NIE) to w jego dopełnieniu każde k wierzchołków
+jest połączonych przynajmniej jedną krawędzią a co za tym idzie nie może być pokrycia n-k elementowego
+(bo jedna krawędź by została bez kolorowego wierzchołka), czyli PW(G', n - k) = NIE
+
+\subsection*{Ważone pokrycie wierzchołkowe}
+Udowodnij, że problem WPW (Ważonego pokrycia wierzchołkowego) $\in$ NPC. WPW definiujemy tak:
+\begin{itemize}
+	\item Dane wejściowe: graf G z obciążonymi wierzchołkami, liczba p $\in \mathbb{N}$
+	\item Pytanie: Czy G zawiera pokrycie wierzchołkowe o wadze $\leq$ p
+\end{itemize}
+rozwiązanie:\\\\
+1)\\
+WPW $\in$ NP - mając dowolne S $\subseteq V$ jesteśmy w stanie zweryfikować w czasie wielomianowym czy waga sumuje się do p, a także, 
+zweryfikować, czy S jest pokryciem \\\\
+2)\\
+T: PW $\alpha$ WPW \\
+D: \\
+PW(G,k) = WPW(G$_w$ ,czyli G z wagami = 1 na każdym wierzchołku, k) \\
+(a) jeśli graf ma pokrycie wierzchołkowe rozmiaru $\leq $ k, to G$_w$ ma pokrycie wierzchołkowe o łącznej wadze $\leq k$, 
+czyli oba problemy odpowiadają TAK \\
+(b) jeśli graf nie posiada pokrycia wierzchołkowego rozmiaru $\leq$ k, to G$_w$ również nie ma pokrycia o łącznej wadze $\leq k$, 
+czyli dla obu problemów mamy NIE.
+
+\subsection*{SORT $\alpha$ MM}
+Udowodnij, że SORT $\alpha$ MM. \\ 
+SORT definujemy tak:
+\begin{itemize}
+	\item Ciąg A n liczb
+	\item Pytanie: Czy A jest rosnący?
+\end{itemize}
+MM definiujemy tak:
+\begin{itemize}
+	\item Dane wejściowe: macierze A,B,C
+	\item Pytanie: Czy $A \times B = C$
+\end{itemize}
+rozwiązanie: \\
+zauważmy, że SORT da się rozwiązać wielomianowo, zatem nasza funkcja przekształcająca dane wejściowe będzie miała postać
+\begin{lstlisting}
+SORT(A,n):
+	if posortowany(A):
+		MM(matrix(0), matrix(0), matrix(0))
+	else:
+		MM(matrix(0), matrix(0), matrix(1))
+\end{lstlisting}
+(a) jeśli SORT = TAK, to MM = TAK, ponieważ matrix(0) $\times$ matrix(0) = matrix(0) \\
+(b) jeśli SORT = NIE, to MM = NIE, ponieważ matrix(0) $\times$ matrix(0) $\ne$ matrix(1)
+
+
+\section{Algorytmy aproksymacyjne}
+\subsection*{Kolorowanie wierzchołków}
+Dla poniższych algorytmów wymień, które grafy koloruje optymalnie, a dla których się myli.
+\begin{enumerate}
+	\item LF
+	\item SL
+	\item SLF
+\end{enumerate}
+rozwiązanie: \\
+1)\\
+optymalnie: $K_n$, $K_{p,q}$ \\
+myli się: $P_6$, koperta,  $J_n$ - graf Johnsona \\\\
+2)\\
+optymalnie: $W_n, C_n, J_n$, drzewa, grafy planarne, grafy Mycielskiego \\
+myli się: grafy dwudzielne, grafy Colemena-Moore'a, pryzma,  pryzmatoid \\\\
+3)\\
+optymalnie: dwudzielne, w tym $J_n$, drzewa, $C_n, W_n$, kaktusy \\
+myli się: $K_{p,q,r}$
+
+\subsection*{Znajdowanie klik w grafie kubicznym}
+Zaprojektuj algorytm 1-absolutnie aproksymacyjny znajdujący największą klikę w n-wierzchołkowym grafie kubicznym. Algorytm powinien mieć złożoność $O(n)$ \\\\rozwiązanie:\\
+Algorytm k-absolutnie aproksymacyjny -> algorytm taki, że dla danych I, gdzie OPT(I) - optymalny wynik, mamy $|A(I) - OPT(I)| \leq 1$, czyli musimy znaleźć algorytm, 
+który będzie mógł się pomylić o 1 w zwracaniu rozmiaru kliki. Oto on:
+
+\begin{lstlisting}
+def clique(G):
+	if n == 4:
+		return {v1, v2, v3, v4}
+	else:
+		u = dowolnysasiad(v1)
+		return {v1, u}
+\end{lstlisting}
+Czyli algorytm zwraca klikę $K_4$ lub $K_2$,  możliwe jest, że w grafie występuje $K_3$ ale chcemy stworzyć algorytm aproksymacyjny, więc możemy się pomylić o 1.
+Algorytm ma złożoność $O(n)$, bo dowolnysasiad(v1) działa w czasie $O(n)$. Algorytm ma złożoność mniejszą niż złożoność pamięciowa, bo niewszystkie dane w macierzy 
+sąsiedztwa reprezentującej graf są danymi istotnymi dla wyniku.
+
+
 
 \section{Dowody grafowe}
 
@@ -944,6 +1055,41 @@ $deg(v) + deg(u) + 6(n-2) \leq 2m \leq 6n - 12 $ co jest sprzeczne ($deg(v) \ne 
 \subsection*{Liczba cyklomatyczna}
 Udowodnij, że dla dowolnego grafu spójnego liczba cyklomatyczna $\gamma(G) = m - n + 1$ \\\\ rozwiązanie: \\
 usuwamy tyle krawędzi, żeby graf stał się acykliczny (czyli żeby stał się drzewem), w drzewie m = n - 1, czyli musimy usunąć m - (n-1) krawędzi cnd. 
+
+\subsection*{Cykl w grafie dwudzielnym}
+Udowodnij, że graf jest dwudzielny $\iff$ nie ma nieparzystych cykli \\\\rozwiązanie:\\
+($\rightarrow$)\\
+załóżmy, że graf dwudzielny ma nieparzysty cykl, zatem nie jest dwukolorowalny, bo nieparzyste cykle wymagają 
+trzech kolorów, sprzeczność \\\\
+($\leftarrow$) \\
+załóżmy, że graf nie ma nieparzystych cykli, zatem dla pewnego wierzchołka $v$ można przyporządkować każdemu innemu wierzchołkowi dwa kolory - jeden dla tych, które są w odległości nieparzystej od v, drugi - parzystej, w ten sposób dowodzimy, że graf jest dwudzielny
+
+\subsection*{Ograniczenie górne na $\chi$}
+Udowodnij, że dla dowolnego grafu zachodzi $\chi(G) \leq \Delta + 1$ \\\\rozwiązanie:\\
+dla n = 1 powyższa zależność zachodzi \\
+załóżmy, że tw. zachodzi dla pewnego n, rozważmy graf n+1 wierzchołkowy G.  
+Z założenia $\chi(G - v) \leq \Delta(G) + 1$, natomiast v ma co najwyżej $\Delta$ sąsiadów, 
+czyli w najgorszym przypadku mamy jeden dostępny kolor, którym możemy go pokolorować, stąd 
+$\chi(G)\leq \Delta(G) + 1$. cnd \\\\
+stąd mamy tw. Brooksa \\
+Dla dwóch klas grafów mamy sytuację $\chi = \Delta + 1$: dla grafów pełnych oraz cykli nieparzystej długości. 
+Dla reszty $\omega \leq \chi \leq \Delta$
+
+\subsection*{Liczba chromatyczna grafu planarnego}
+Dla grafu planarnego G udowodnij:
+\begin{enumerate}
+	\item $\chi(G) \leq 6$
+	\item $\chi(G) \leq 5$
+	\item czy jest lepsze oszacowanie na liczbę chromatyczną dla grafów planarnych?
+\end{enumerate}
+rozwiązanie: \\
+(1.)\\
+(2.)\\
+(3.)\\
+tak, $\chi(G) \leq 4$
+
+\subsection*{Tw. Vizinga}
+Udowodnij tw. Vizinga: $\Delta \leq \chi^, \leq \Delta + 1$
 
 \section{Trudne zadania}
 \subsection*{Pokrycie wierzchołkowe *}
