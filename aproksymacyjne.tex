@@ -1,0 +1,129 @@
+\documentclass{article}
+
+\title{Algorytmy aproksymacyjne}
+\author{Dominik Lau}
+
+\usepackage{blindtext}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{esvect}
+\usepackage{graphicx}
+
+
+\graphicspath{ {./obrazy/} }
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Podejścia w rozwiązywaniu problemów NP-trudnych}
+\textbf{Prawie na pewno rozwiązanie} - algorytm wielomianowy prawie zawsze znajdzie dobre rozwiązanie (tak często jak sobie tego zażyczymy) \\\\
+\textbf{Prawie zawsze szybko} - algorytm w średnim wypadku wielomianowy,  zawsze znajdzie rozwiązanie
+ale czasem będzie potrzebował czasu wykładniczego \\\\
+\textbf{Prawie optymalne rozwiązanie} - działa w czasie wielomianowym, zawsze zwraca jakiś wynik, niezawsze 
+poprawny (oddalony od właściwego o pewną wielkość)
+
+\section{Definicje}
+\subsection{Algorytm k-absolutnie aproksymacyjny}
+Jest to taki algorytm A, który dla pewnych danych $I$ gwarantuje
+\begin{gather*}
+	|A(I) - OPT(I)| \leq k
+\end{gather*}
+\subsection{Algorytm k(względnie)-aproksymacyjny}
+Jest to taki algorytm A, który dla pewnych danych $I$ gwarantuje dla problemu minimalizacyjnego
+\begin{gather*}
+	\frac{A(I)}{OPT(I)} \leq k
+\end{gather*}
+a dla maksymalizacyjnego
+\begin{gather*}
+	\frac{OPT(I)}{A(I)} \leq k
+\end{gather*}
+
+\subsection{Schemat aproksymacyjny}
+dla problemu minimalizacyjnego algorytm A jest schematem aproksymacyjnym
+jeśli dla każdego $\varepsilon > 0$ zachodzi
+\begin{gather*}
+	\frac{A(I)}{OPT(I)} \leq 1 + \varepsilon
+\end{gather*}
+\textbf{po ludzku}: mamy algorytm aproksymacyjny,  którego dokładność możemy regulować (tylko, że czym większa dokładność, tym większa złożoność algorytmu)\\\\
+\textbf{PTAS} - schemat wielomianowy względem rozmiaru problemu,  np.  $O(n^{\frac{1}{\varepsilon}})$ \\
+\textbf{FPTAS} - schemat wielomianowy względem rozmiaru  i $\frac{1}{\varepsilon}$, np. $O((\frac{1}{\varepsilon})^2n)$
+
+\section{Przykłady algorytmów aproksymacyjnych}
+
+\textbf{NaiveColor} - przybliżone kolorowanie krawędzi
+\begin{lstlisting}
+def NaiveColor(G):
+	c = 1
+	for e in E(G):
+		C = set{1..c}
+		C.usun_nielegalne_kolory(e)
+
+		if C.empty():
+			c+=1
+			color(e) = c
+		else:	
+			color(e) = pick_any(C)
+\end{lstlisting}
+dla każdej krawędzi przeglądamy maksymalnie $2\Delta$ kolorów innych krawędzi (a z tw.Vizinga $\Delta \leq \chi' \leq \Delta + 1$), więc pomylimy się góra dwukrotnie zatem jest to algorytm 2-aproksymacyjny \\\\
+\textbf{NaiveCover} - przybliżone pokrycie wierzchołkowe
+\begin{lstlisting}
+def NaiveCover(G):
+	C = set()
+	while not E.empty():
+		{u,v} = pick_any(E)		
+		C.add(u) # !!!
+		C.add(v) # !!!
+		E.remove_incident(u)
+		E.remove_incident(v)
+	return C
+\end{lstlisting}
+dla wybranej krawędzi umieszczamy w pokryciu oba wierzchołki (zamiast jednego), więc w najgorszym przypadku umieścimy w pokryciu dwa razy za dużo wierzchołków - algorytm jest 2-aproksymacyjny\\\\
+\textbf{kolorowanie krawędzi z tw. Vizinga}
+\begin{lstlisting}
+def ChromaticIndex(G):
+	return Delta(G)
+\end{lstlisting}
+jest to algorytm 1-absolutnie aproksymacyjny (bo czasem się pomylimy o jeden kolor) oraz $\frac{4}{3}$-aproksymacyjny \\\\
+\textbf{kolorowanie wierzchołkowe grafów planarnych}
+\begin{lstlisting}
+def ChromaticNumberPlanar(G):
+	if empty(G): return 1
+	if bipartite(G): return 2
+	return 4
+\end{lstlisting}
+jest to algorytm 1-absolutnie aproksymacyjny - czasem mylimy się o jeden kolor (jeśli $\chi = 3$) oraz $\frac{4}{3}$-aproksymacyjny \\\\
+\textbf{przykłady FPTAS} \\
+Problem plecakowy: $O(n(logn + \frac{1}{\varepsilon^2}))$ oraz $O(nlog(\frac{1}{\varepsilon}) + \frac{1}{\varepsilon^4} )$ \\
+Problem sumy podzbioru: $O(n + \frac{1}{\varepsilon^3})$
+
+
+
+\end{document}

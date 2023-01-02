@@ -861,6 +861,25 @@ Jak wykorzystać ten algorytm dla grafu, który nie ma gwiazdy spinającej? \\\\
 Chcemy się dowiedzieć, czy graf ma klikę $\leq$ k. \\
 Dokładamy do G gwiazdę spinającą, następnie pytamy o to, czy powstały graf ma klikę $\leq$ k-1.
 
+\subsection*{konwersja do 3CNF}
+Sprowadź podane wyrażenia do 3CNF 
+\begin{enumerate}
+	\item $x_1 + \overline{x}_2$
+	\item $x_1$
+	\item $x_1 + x_2 + \overline{x}_3 + x_4$
+	\item $x_1 + x_2 + x_3 + x_4 + x_5$
+
+\end{enumerate}
+rozwiązanie: \\
+1) $x_1 + \overline{x}_2 =(x_1 + \overline{x}_2 + y)(x_1 + \overline{x}_2 + \overline{y})$\\
+2) $x_1 = (x_1 + y)(x_1 + \overline{y}) = (x_1 + y + z)(x_1 + y + \overline{z})(x_1 + \overline{y} + z)(x_1 + \overline{y} + \overline{z})$ \\
+3) $x_1 + x_2 + \overline{x}_3 + x_4 = (x_1 + x_2 + y)(\overline{x}_3+x_4 + \overline{y})$ \\
+4) $x_1 + x_2 + x_3 + x_4 + x_5 = (x_1 + x_2 + y)(x_3+x_4 + x_5 + \overline{y}) = (x_1+x_2+y)(x_3+x_4+\overline{z})(x_5+\overline{y}+z)$
+\\\\
+\textbf{UWAGA!} \\
+w podpunkcie 3 i 4 zastosowaliśmy trik, niech $\phi$ będzie dowolną formułą logiczną DNF o literałach $a, b,c,d$  to jest $\phi = a+b+c+d$ \\
+wówczas $\psi = (a+b+y)(c+d+\overline{y})$ jest równoważne w kontekście spełnialności do $\phi$. Innymi słowy zawsze zachodzi SAT($\psi$) = SAT($\phi$)
+
 \subsection*{KLIKA $\in$ NPC}
 Udowodnij, że KLIKA $\in$ NPC. Użyj problemu CNF-SAT. \\\\
 rozwiązanie:\\
@@ -946,6 +965,21 @@ SORT(A,n):
 (a) jeśli SORT = TAK, to MM = TAK, ponieważ matrix(0) $\times$ matrix(0) = matrix(0) \\
 (b) jeśli SORT = NIE, to MM = NIE, ponieważ matrix(0) $\times$ matrix(0) $\ne$ matrix(1)
 
+\subsection*{Gwiazda spinająca i klika}
+Marek ma magiczną skrzynkę rozwiązującą problem k-kliki ale tylko, gdy w grafie jest gwiazda spinająca. 
+Jak Andrzej ma zmienić swój graf niezawierający gwiazdy spinającej, żeby móc skorzystać ze skrzynki Marka? \\\\
+rozwiązanie:\\
+\begin{lstlisting}
+def Andrzej(G,k):
+	G2 = G + gwiazda_spinajaca
+	return Marek(G2, k+1)
+\end{lstlisting}
+(*) dodając gwiazdę spinającą zwiększamy rozmiar każdej kliki o 1 \\\\
+(a) jeśli Marek(G2, k+1) daje TAK, to oznacza, że w G2 mamy k+1-klikę zatem w G mamy k-klikę zgodnie z (*), czyli Andrzej(G,k) daje TAK\\
+(b) jeśli Marek(G2, K+1) daje NIE, to oznacza, że w G2 nie mamy k+1-kliki, a zatem z faktu (*) w grafie G nie ma k-kliki, czyli
+Andrzej(G,k) daje NIE \\\\
+czyli problem zostaje zachowany
+
 
 \section{Algorytmy aproksymacyjne}
 \subsection*{Kolorowanie wierzchołków}
@@ -983,7 +1017,63 @@ Czyli algorytm zwraca klikę $K_4$ lub $K_2$,  możliwe jest, że w grafie wyst�
 Algorytm ma złożoność $O(n)$, bo dowolnysasiad(v1) działa w czasie $O(n)$. Algorytm ma złożoność mniejszą niż złożoność pamięciowa, bo niewszystkie dane w macierzy 
 sąsiedztwa reprezentującej graf są danymi istotnymi dla wyniku.
 
+\subsection*{Problem komiwojażera}
+Udowodnij, że jeśli P $\ne$ NP to problem komiwojażera nie ma wielomianowego algorytmu względnie aproksymacyjnego. \\\\rozwiązanie:\\
+Załóżmy, że isnieje taki algorytm k-aproksymacyjny - użyjemy go do rozwiązania problemu Ścieżki Hamiltona. 
+Dla pewnego grafu G dodajemy wagę 1 do jego krawędzi, następnie tworzymy $\bar{G}$
+i dodajemy do jego krawędzi wagę $kn$, scalamy te grafy i otrzymujemy graf pełny G$^*$. Dla G$^*$ uruchamiamy nasz algorytm.
+Wiemy, że jeśli G ma ścieżkę Hamiltona, to OPT(G$^*$) = n, w przeciwnym wypadku OPT(G$^*$) $> kn$ natomiast nasz algorytm zwraca A(G$^*$) $\leq kn$,
+więc sprawdzając, czy nasz algorytm zwrócił $\leq kn$ możemy stwierdzić w czasie P, że graf posiada cykl Hamiltona lub nie $\rightarrow$ P = NP, co jest sprzeczne z zał.
 
+
+\subsection*{Pokrycie wierzchołkowe}
+Dla Pokrycia wierzchołkowego, gdzie k oznacza maksymalny rozmiar pokrycia:
+\begin{enumerate}
+	\item udowodnij, że problem jest wielomianowy dla dowolnego ustalonego k
+	\item zaprojektuj algorytm wielomianowy dla k = 1
+	\item Udowodnij, że optymalizacyjna wersja PW nie ma algorytmu wielomianowego 1-absolutnie aproksymacyjnego (chyba, że P = NP)
+\end{enumerate}
+rozwiązanie: \\
+(1.) \\
+rozwiązanie takiego problemu można przeprowadzić poprzez
+sprawdzenie wszystkich kombinacji tego, które wierzchołki są w pokryciu,
+a które nie, co można zrobić w czasie $O(n^k)$ i sprawdzenie dla każdego, czy 
+pokrywa cały zbiór krawędzi, co mozna zrobić w czasie $O(m)$, zatem 
+przy ustalonym k mamy problem wielomianowy \\\\
+(2.) 
+\begin{lstlisting}
+def coverWithOne(G):
+	for i = 1 to n:
+		if vi covers entire E(G):
+			return True
+	return False
+\end{lstlisting}
+złożoność to O(nm) \\\\
+(3.) \\
+załóżmy, że istnieje taki algorytm A,  powiedzmy, że mamy G
+taki, że pw(G) = k, skonstruujemy na jego podstawie graf G$^*$ = $G \cup G$,
+dla którego pw(G$^*$) = 2k, ponieważ musimy pokryć obie składowe spójności.
+Poniższy algorytm umożliwia nam dokładne rozwiązanie problemu PW.
+\begin{lstlisting}
+def ExactPolynomialVertexCover(G):
+	Gstar = G U G
+	a = A(Gstar) # 2k v 2k+1
+	return floor(a/2)
+\end{lstlisting}
+dokładne rozwiązanie NP-trudnego problemu PW w czasie wielomianowym 
+$\rightarrow$ P = NP, co jest sprzeczne z założeniem.
+
+\subsection*{Dokładna liczba chromatyczna}
+Masz 100-wierzchołkowy graf G, a ja posiadam schemat PTAS, który działa w czasie
+$O(n^{\frac{1}{\varepsilon}}) \mu$s. Chcesz stwierdzić, czy $\chi(G) = 3$, 
+jak skorzystasz z mojego schematu i jak długo sekund będą trwały Twoje obliczenia?
+ \\\\rozwiązanie:\\
+skorzystać można poprzez odpowiednie ustalenie $\varepsilon$: 
+ $a - \chi < 1 \rightarrow a  < 1 + \chi$, stąd mamy 
+$\frac{a}{\chi} \leq 1 + \varepsilon < \frac{1 + \chi}{\chi} \rightarrow \varepsilon < \frac{1}{\chi}$ 
+wówczas dla ustalnonego $\chi$ otrzymujemy dokładny wynik, zatem przyjmujemy 
+$\chi = 3$ $\rightarrow \varepsilon < \frac{1}{3}$  czyli np. $\varepsilon = \frac{1}{4}$. 
+Wówczas T = $100^4$ $\mu$s = $100$ s. 
 
 \section{Dowody grafowe}
 

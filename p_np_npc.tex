@@ -1,0 +1,87 @@
+\documentclass{article}
+
+\title{NP, NPC, NPH}
+\author{Dominik Lau}
+
+\usepackage{blindtext}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{esvect}
+\usepackage{graphicx}
+
+
+\graphicspath{ {./obrazy/} }
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+\begin{document}
+
+\maketitle
+
+\section{NP}
+\subsection{Definicja}
+Decyzyjny problem $\Pi \in$ NP $\iff$ jest rozwiązywalny w czasie wielomianowym przy zastosowaniu idei wyroczni weryfikowalne w czasie wielomianowym. \\\\
+Decyzyjny problem $\Pi \in$ P $\iff$ jest rozwiązywalny w czasie wielomianowym. \\\\
+Decyzyjny problem $\Pi \in$ NPI $\iff \Pi \in$ NP - P (NP-intermediate).  Problemy, dla których nie udowodniono, że są ani P ani NPC.\\\\
+\textbf{Uwaga}
+$\Pi \in$ P $\rightarrow \Pi \in$ NP 
+
+\subsection{Algorytmy niedeterministyczne}
+Algorytm wykonywany na niedeterministycznej maszynie Turinga, definiujemy działanie wyboru O(1)
+zwracające dobry wynik dla zbioru danych.
+
+\subsection{Przykładowy problem NPI}
+Izomorfizm grafu
+
+\subsection{$\alpha$-redukcja}
+$\Pi_1 \alpha \Pi_2 \iff$  mamy funkcję T(x), która zachowuje problem i 
+zmienia dane wejściowe $\Pi_1$ do $\Pi_2$. \\\\
+\textbf{Istotne jest}, że $tr(\Pi_1) \leq tr(\Pi_2)$, gdzie $tr$ - trudność problemu.
+
+\section{NPC}
+\subsection{Definicja}
+Decyzyjny problem $\Pi \in$ NPC $\iff$ $\Pi \in NP$ i $\forall_{\Pi_1 \in NP} \Pi_1 \alpha \Pi$. Czyli jest to problem
+przynajmniej tak samo trudny jak wszystkie inne problemy w NP.
+
+\subsection{3SAT i 3CNF}
+\textbf{3CNF} to formuła logiczna składająca się z iloczynu klauzul, w których występują po trzy literały.
+np. $\phi = (x_1 + x_2 + x_3)(\overline{x}_1 + x_4 + x_5)$ \\\\
+\textbf{3SAT} to problem o pytaniu: Czy podana formuła $\phi$ 3CNF jest spełnialna tj. czy dla pewnego wartościowania zmiennych $\phi$, $\phi = 1$. Jest to jedyny problem NPC,  dla którego udowodniono bezpośrednio, 
+że jest NPC (Cook,1971). Na chłopski rozum dlaczego tak jest: każdy algorytm można sprowadzić do
+układu funkcji logicznych (np. układu bramek logicznych).
+ 
+\subsection{Przykładowe problemy NPC}
+\textbf{Pokrycie wierzchołkowe} \\\\
+\textbf{3-wymiarowe skojarzenie} \\\\
+\textbf{2-podział} \\\\
+\textbf{Suma podzbioru} \\\\
+\textbf{Genus grafu}
+
+\section{NPH}
+
+\end{document}
