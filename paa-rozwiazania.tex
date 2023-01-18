@@ -980,6 +980,20 @@ def Andrzej(G,k):
 Andrzej(G,k) daje NIE \\\\
 czyli problem zostaje zachowany
 
+\subsection*{Klika dec}
+Masz pudełko Klika dec, które dla wejściowego grafu G odpowiada TAK,NIE na problem KLIKA (dane wejściowe: G, próg p) w czasie O(n).
+Jak użyjesz go do znalezienia wierzchołków maksymalnej kliki. Złożoność algorytmu. \\\\ Rozwiązanie:
+\begin{lstlisting}
+def w_kliki(G):
+	omega = metoda_bisekcji_wyznacz_k_najwiekszej_kliki(G) #O(nlogn)
+	
+	for v in G: # O(n^2)
+		G = G - v
+		if Klika_dec(G) != omega:
+			G = G + v	
+	return G
+\end{lstlisting}
+$T = O(n^2)$
 
 \section{Algorytmy aproksymacyjne}
 \subsection*{Kolorowanie wierzchołków}
@@ -1074,6 +1088,42 @@ $\frac{a}{\chi} \leq 1 + \varepsilon < \frac{1 + \chi}{\chi} \rightarrow \vareps
 wówczas dla ustalnonego $\chi$ otrzymujemy dokładny wynik, zatem przyjmujemy 
 $\chi = 3$ $\rightarrow \varepsilon < \frac{1}{3}$  czyli np. $\varepsilon = \frac{1}{4}$. 
 Wówczas T = $100^4$ $\mu$s = $100$ s. 
+
+\subsection*{ODS}
+Problem OGraniczone drzewo spinające ODS(G,k) pyta: czy w grafie G można znaleźć drzewo spinające o maksymalnym stopniu k. Udowodnij, że 
+\begin{enumerate}
+	\item Graf półhamiltonowski $\alpha$ ODS(G,k)
+	\item jeśli P $\ne$ NP to dla każdego $\varepsilon < 1.5$ nie istnieje wielomianowy algorytm $\varepsilon$-przybliżony dla znajdowania minimalnego ODS
+\end{enumerate}
+rozwiązanie:\\
+(1.) 
+\begin{lstlisting}
+def SH(G):
+	return ODS(G,2)
+\end{lstlisting}
+dla k = 2 ODS pyta, czy graf ma ścieżkę hamiltona \\\\
+(2.) \\
+załóżmy, że istnieje taki algorytm aproksymacyjny A, za pomocą poniższego algorytmu można rozwiązać w wielomianowym czasie NPC problem ścieżki hamiltona.
+\begin{lstlisting}
+def SH(G):
+	k = A(G)
+	if k == 2:
+		return 'TAK'
+	return 'NIE'
+\end{lstlisting}
+W powyższym programie wychodzimy z faktu $\frac{A(G)}{OPT(G)} < \frac{3}{2}$, w szczególności dla $OPT(G) = 2$ mamy 
+$\frac{A(G)}{2} < \frac{3}{2} \rightarrow A(G) < 3$ czyli gdy A daje wynik 2, to znaczy, że znajdujemy rozwiązanie optymalne.
+Zatem mamy rozwiązanie NPC problemu ścieżki hamiltona w czasie P, czyli P = NP, co jest sprzeczne z założeniami cnd.. 
+
+
+\subsection*{PSK}
+Problem selektywnego komiwojażera zadanie TODO
+
+\subsection*{Problem podgrafu}
+TODO
+
+\subsection*{SL}
+zadanie SL
 
 \section{Dowody grafowe}
 

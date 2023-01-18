@@ -56,7 +56,9 @@ Algorytm wykonywany na niedeterministycznej maszynie Turinga, definiujemy dział
 zwracające dobry wynik dla zbioru danych.
 
 \subsection{Przykładowy problem NPI}
-Izomorfizm grafu
+\textbf{Izomorfizm grafu} \\
+Dane: G$_1$, G$_2$ \\
+Pytanie: Czy G$_1$ izomorficzny do G$_2$?
 
 \subsection{$\alpha$-redukcja}
 $\Pi_1 \alpha \Pi_2 \iff$  mamy funkcję T(x), która zachowuje problem i 
@@ -74,14 +76,37 @@ np. $\phi = (x_1 + x_2 + x_3)(\overline{x}_1 + x_4 + x_5)$ \\\\
 \textbf{3SAT} to problem o pytaniu: Czy podana formuła $\phi$ 3CNF jest spełnialna tj. czy dla pewnego wartościowania zmiennych $\phi$, $\phi = 1$. Jest to jedyny problem NPC,  dla którego udowodniono bezpośrednio, 
 że jest NPC (Cook,1971). Na chłopski rozum dlaczego tak jest: każdy algorytm można sprowadzić do
 układu funkcji logicznych (np. układu bramek logicznych).
- 
+
+\subsection{Dowodzenie NPC}
+Dowodzenie, czy $\Pi$ jest NP-zupełny
+\begin{enumerate}
+	\item wybrać problem $\Pi^* \in$ NPC
+	\item pokazać $\Pi^*$ $\alpha$ $\Pi$ $\rightarrow \Pi \in$ NPH
+	\item pokazać, że $\Pi \in$ NP ($\iff \Pi$ $\alpha$ $\Pi^*$)
+\end{enumerate}
+
 \subsection{Przykładowe problemy NPC}
+\textbf{3CNF} \\\\
 \textbf{Pokrycie wierzchołkowe} \\\\
 \textbf{3-wymiarowe skojarzenie} \\\\
 \textbf{2-podział} \\\\
 \textbf{Suma podzbioru} \\\\
 \textbf{Genus grafu}
 
+
 \section{NPH}
+\subsection{Definicja}
+Problem $\Pi \in$ NPH $\iff$ $Pi$ jest co najmniej tak samo trudny jak wszystkie problemy w NP.
+Decyzyjna wersja problemu $\Pi_o \in$ NPH $= \Pi_d \in$ NPC.  \\\\
+\textbf{Mając rozwiązanie wielomianowe problemu decyzyjnego prawie zawsze możemy
+rozwiązać odpowiadający mu problem optymalizacyjny w czasie wielomianowym}
+
+\subsection{Optymalne kolorowanie grafu, mając rozwiązanie problemu decyzyjnego}
+TODO
+
+
+
+
+
 
 \end{document}

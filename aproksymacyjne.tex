@@ -43,13 +43,6 @@
 
 \maketitle
 
-\section{Podejścia w rozwiązywaniu problemów NP-trudnych}
-\textbf{Prawie na pewno rozwiązanie} - algorytm wielomianowy prawie zawsze znajdzie dobre rozwiązanie (tak często jak sobie tego zażyczymy) \\\\
-\textbf{Prawie zawsze szybko} - algorytm w średnim wypadku wielomianowy,  zawsze znajdzie rozwiązanie
-ale czasem będzie potrzebował czasu wykładniczego \\\\
-\textbf{Prawie optymalne rozwiązanie} - działa w czasie wielomianowym, zawsze zwraca jakiś wynik, niezawsze 
-poprawny (oddalony od właściwego o pewną wielkość)
-
 \section{Definicje}
 \subsection{Algorytm k-absolutnie aproksymacyjny}
 Jest to taki algorytm A, który dla pewnych danych $I$ gwarantuje
@@ -73,7 +66,8 @@ jeśli dla każdego $\varepsilon > 0$ zachodzi
 	\frac{A(I)}{OPT(I)} \leq 1 + \varepsilon
 \end{gather*}
 \textbf{po ludzku}: mamy algorytm aproksymacyjny,  którego dokładność możemy regulować (tylko, że czym większa dokładność, tym większa złożoność algorytmu)\\\\
-\textbf{PTAS} - schemat wielomianowy względem rozmiaru problemu,  np.  $O(n^{\frac{1}{\varepsilon}})$ \\
+\textbf{PTAS} - (czyt. "pitas") schemat wielomianowy względem rozmiaru problemu,  np.  $O(n^{\frac{1}{\varepsilon}})$ \\
+\textbf{EPTAS} - schemat wielomianowy względem n, w którym $\varepsilon$ nie jest w potędze n \\
 \textbf{FPTAS} - schemat wielomianowy względem rozmiaru  i $\frac{1}{\varepsilon}$, np. $O((\frac{1}{\varepsilon})^2n)$
 
 \section{Przykłady algorytmów aproksymacyjnych}
@@ -120,9 +114,20 @@ def ChromaticNumberPlanar(G):
 	return 4
 \end{lstlisting}
 jest to algorytm 1-absolutnie aproksymacyjny - czasem mylimy się o jeden kolor (jeśli $\chi = 3$) oraz $\frac{4}{3}$-aproksymacyjny \\\\
+
+\textbf{podstawowy algorytm do rozwiązywania TSP}
+
+\begin{lstlisting}
+def TSP_approx(G):
+	MST = findMinimumSpanningTree(G)
+	path = connect_vertices_in_triangles(G)
+	return path
+\end{lstlisting}
+jest to algorytm 2-aproksymacyjny na płaszczyźnie \\\\
 \textbf{przykłady FPTAS} \\
 Problem plecakowy: $O(n(logn + \frac{1}{\varepsilon^2}))$ oraz $O(nlog(\frac{1}{\varepsilon}) + \frac{1}{\varepsilon^4} )$ \\
-Problem sumy podzbioru: $O(n + \frac{1}{\varepsilon^3})$
+Problem sumy podzbioru: $O(n + \frac{1}{\varepsilon^3})$ \\\\
+
 
 
 
