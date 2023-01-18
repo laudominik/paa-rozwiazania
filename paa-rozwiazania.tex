@@ -41,8 +41,9 @@
 \begin{document}
 
 \maketitle
+\tableofcontents
 
-\section{algorytmy}
+\section{Algorytmy}
 \subsection*{Karatsuba}
 a) oszacuj złożoność obliczeniową algorytmu Karatsuby \\
 b) opracowałeś metodę mnożenia dwóch liczb 4-cyfrowych za pomocą 10 mnożeń elementarnych,.
@@ -576,7 +577,7 @@ $T(n) = T(n-1) + T(n-2) + \frac{2^n}{n} \leq 2T(n-1) + \frac{2^n}{n} = O(n2^n)$ 
 $T(r) = O(2^r * 2^{2^r})$ \\
 lepsze oszacowanie: $T(n) = T(n-1) + T(n-2) + \frac{2^n}{n} \leq ... + 2^n(\frac{1}{n} + \frac{1}{n-1} + \frac{1}{n-2} + ... + 1) \leq 2^n ln(n) \rightarrow T(n) = O(log(n) 2^n)$ 
 
-\section{struktury danych}
+\section{Struktury danych}
 \subsection*{LSAP*}
 W historii problemu przydziału dla ważonych grafów dwudzielnych znane są algorytmy o złożonościach:
 $O(\sqrt{n}Wlog(Cn^2/W)/logn))$, $O(\sqrt{n}mlog(nC))$, $O(n^{3/4}mlogC)$, $?$,$O(nmlog(nC)$, $O(n^4)$, $O(n^3)$
@@ -1046,6 +1047,7 @@ Dla Pokrycia wierzchołkowego, gdzie k oznacza maksymalny rozmiar pokrycia:
 	\item udowodnij, że problem jest wielomianowy dla dowolnego ustalonego k
 	\item zaprojektuj algorytm wielomianowy dla k = 1
 	\item Udowodnij, że optymalizacyjna wersja PW nie ma algorytmu wielomianowego 1-absolutnie aproksymacyjnego (chyba, że P = NP)
+	\item Udowodnij, że optymalizacyjna wersja PW nie ma schematu FPTAS
 \end{enumerate}
 rozwiązanie: \\
 (1.) \\
@@ -1075,7 +1077,21 @@ def ExactPolynomialVertexCover(G):
 	return floor(a/2)
 \end{lstlisting}
 dokładne rozwiązanie NP-trudnego problemu PW w czasie wielomianowym 
-$\rightarrow$ P = NP, co jest sprzeczne z założeniem.
+$\rightarrow$ P = NP, co jest sprzeczne z założeniem. \\\\
+(4.) \\
+załóżmy, że taki schemat FPTAS A($\varepsilon$) istnieje, 
+przyjmijmy $\varepsilon = \frac{1}{n+1}$, czyli nasz algorytm będzie wielomianowy,
+przyjąwszy to $\varepsilon$, otrzymujemy $\frac{A}{OPT} \le 1 + \frac{1}{n+1}$ natomiast
+OPT $\le$ n (z faktu, że jest to pokrycie wierzchołkowe),
+czyli $A \le OPT + \frac{OPT}{n+1} < OPT + 1$ więc A daje nam wynik dokładny, czyli
+w czasie wielomianowym rozwiązujemy NPC problem PW $\rightarrow$ P = NP sprzeczność
+
+\subsection*{M$\Delta$ST}
+Problem optymalizacyjny M$\Delta$ST szuka drzewa spinającego o minimalnej $\Delta$-cie.
+Pokaż, że problem jest NPH. \\\\rozwiązanie:\\
+dla $\Delta$ = 2 problem jest odpowiednikiem ścieżki Hamiltona
+więc jest przynajmniej tak samo trudny jak SH, czyli jest NPH.
+
 
 \subsection*{Dokładna liczba chromatyczna}
 Masz 100-wierzchołkowy graf G, a ja posiadam schemat PTAS, który działa w czasie
@@ -1117,13 +1133,254 @@ Zatem mamy rozwiązanie NPC problemu ścieżki hamiltona w czasie P, czyli P = N
 
 
 \subsection*{PSK}
-Problem selektywnego komiwojażera zadanie TODO
+Problem selektywnego komiwojażera to taka odmiana problemu komiwojażera, w której nie musi
+odwiedzić wszystkich miast. Mamy obciążony krawędziowo (odległości) graf pełny G i nieujemny zysk za odwiedziny każdego wierzchołka, 
+chcemy znaleźć cykl odwiedzający każdy wierzchołek co najwyżej raz, który maksymalizuje zysk (po odliczeniu kosztów).
+\begin{enumerate}
+	\item pokaż, że dla decyzyjnej wersji problem selektywnego komiwojażera (PSK) PSK $\in$ NPC
+	\item podaj przypadek szczególny problemu selektywnego komiwojażera,  który można rozwiązać liniowo. Przedstaw odpowiedni algorytm. 
+\end{enumerate}
+rozwiązanie: \\
+(1.) \\
+PSK w wersji decyzyjnej \\
+Dane: ważony G, nagroda za odwiedzenie wierzchołka, próg p \\
+Pytanie: czy w G jest taki cykl selektywnego komiwojażera, że jego zysk $\ge $ p? \\\\
+zredukujemy cykl hamiltona do PSK
+\begin{lstlisting}
+def CH(G):
+	for {u,v} in V(G):
+		if {u,v} in E(G):
+			waga({u,v}) = 0
+		else:
+			E(G) = E(G) U {u,v}
+			waga({u,v}) = inf
+	zysk = 1
+	prog = n	
+	return PZK(G,zysk,prog)
+\end{lstlisting}
+jest to transformacja wielomianowa, bo dodawanie wag itp. to jest góra $O(n^2)$,
+ponadto zachowuje problem, bo jeśli G ma cykl hamiltona to ważony G będzie miał taki cykl, który idzie po wszystkich wierzchołkach
+(nie wchodzi na żadną "nielegalną" krawędź), czyli otrzymuje zysk w wysokości = n. 
+Jeśli G nie ma cyklu hamiltona,  to żeby przejść po wszystkich wierzchołkach w celu uzyskania zysku wysokości n komiwojażer
+będzie musiał skorzystać z niedozwolonej krawędzi tym samym redukując swoje zyski do -inf. \\\\
+(2.)\\
+przypadek szczególny to gdy wagi są dużo większe od zysku. Wówczas znajdujemy tylko wierzchołek o maksymalnym zysku i się z niego nie ruszamy.
 
 \subsection*{Problem podgrafu}
-TODO
+Wiadomo, że sprawdzenie czy dla danej pary grafów (H,G) pierwszy z nich jest podgrafem drugiego stanowi problem NP-zupełny. Określ
+status (wielomianowy lub NP-zupełny) podproglemów tego zagadnienia.
+\begin{enumerate}
+	\item H jest grafem pełnym
+	\item G jest grafem pełnym
+	\item H jest gwiazdą
+	\item H jest ścieżką
+	\item H jest $K_3$
+	\item H jest 1-regularny
+	\item G jest 1-regularny
+	\item H jest cyklem
+	\item G jest $K_{3,3}$
+\end{enumerate}
+rozwiązanie: \\
+\begin{enumerate}
+	\item $\in$ NPC (problem kliki)
+	\item $\in$ P (jeśli G ma więcej wierzchołków niż H to znaczy, że H jest jego podgrafem)
+	\item $\in$ P (czy jest wierzchołek stopnia $n(H)-1$)
+	\item $\in$ NPC (dla n(H) = n(G) jest to problem ścieżki Hamiltona)
+	\item $\in$ P (szukamy trójkątów w grafie, mnożenie macierzy tego typu)
+	\item $\in$ P, patrzymy, czy G ma $\frac{n(H)}{2}$ niezależnych krawędzi (?, być może jednak NPC)
+	\item $\in$ P
+	\item $\in$ NPC (dla n(H) = n(G) jest to problem cyklu Hamiltona)
+	\item $\in$ P (ograniczona liczba możliwych podgrafów)
+\end{enumerate}
+
+\subsection*{Mapa}
+
+\begin{center}
+\includegraphics[width=3cm]{mapa}
+\end{center}
+Pewne państwo składa się z n prowincji (rysunek powyżej). Przywódca państwa rezydująct w stolicy s, 
+ma zamiar odwiedzić wszystkie stolice minimalizując koszty.  
+Czy jest to problem NP-trudny czy wielomianowy? Uzasadnij. \\\\Rozwiązanie:\\
+Jest to problem wielomianowy - podproblem TSP na grafie $W_n$, który można rozwiązać w czasie $O(n^2)$.
+Znajdujemy parę najmniejszych krawędzi "sąsiednich" (o minimalnej sumie wag) z s to pewnych dwóch wierzchołków i okrążamy wszystkie miasta.
+
+\subsection*{Minimalne rozcięcie}
+Problem Minimalne Rozcięcie pyta jak równo podzielić wierzchołki grafu o n parzystym, tak aby zminimalizować liczbę krawędzi łączących wierzchołki z różnych podzbiorów. 
+Najszybszy znany algorytm dla problemu MR ma złożoność $O(2^{kkk}n^3log^3n)$ gdzie k jest rozmiarem minimalnego cięcia.  Pokaż, że problem jest NP-trudny dla nieparzystej liczby wierzchołków. 
+Dla jakich klas grafów jest on wielomianowy a dla jakich wykładniczy.  \\\\Rozwiązanie:\\
+(I) \\
+Do grafu o parzystej liczbie wierzchołków dokładamy wierzchołek izolowany i otrzymujemy tak samo 
+trudny problem. \\\\
+(II)\\
+drzewa, ścieżki, cykle \\\\
+(III)\\
+grafy pełne, grafy dwudzielne pełne, koła, gwiazdy
+
+\subsection*{Ponownie klika}
+Znajdź algorytm k-absolutnie aproksymacyjnym znajdowania w grafie planarnym spójnym G (zapisanym w macierzy sąsiedztwa) wierzchołków maksymalnej kliki. Algorytm ma mieć
+\begin{enumerate}
+\item minimalną złożoność
+\item minimalne k
+\end{enumerate}
+rozwiązanie: \\
+(1.)
+\begin{lstlisting}
+def Alg1(G):
+	return [1]
+\end{lstlisting}
+złożoność O(1), aproksymacja k = 3 \\
+(2.)
+\begin{lstlisting}
+def Alg2(G):
+	G2 = G * G
+	
+	for i = 1 to n:
+		for j = 1 to n:
+			if G[i,j] == 1 and G2[i,j] >= 1:
+				return [i, j, any_common_neighbor(i,j)]
+	if G empty: return [1]
+	else return [v,u] , gdzie v, u - dowolna krawedz
+\end{lstlisting}
+złożoność $O(n^3)$ (złożoność mnożenia macierzy),  aproksymacja k = 1
+
+\subsection*{3 PO 3}
+Alicja i Bogdan mają czarą skrzynkę o azwie 3 PO 3, która rozwiązuje problem 3P o pytaniu: 3 da się podzielić zbiór na 3 równe części?
+Zbiór jest postaci C = ${c_1, c_2, c_3, ..., c_n}$. $c_i \in \mathbb{N}$.
+Jak powinni skorzystać ze skrzynki, żeby rozwiązać następujące podproblemy problemu 2P: 
+\begin{enumerate}
+	\item problem 2P
+	\item podproblem, w którym $c_i \le 3$
+	\item podproblem, w którym $c_i = 3^i$
+	\item 3 PO 3 akceptuje tylko liczby podzielne przez 3
+	\item 3 PO 3 akceptuje tylko ciągi długości n  =  3k
+\end{enumerate}
+Rozwiązanie: \\
+(1.) \\
+do zbioru dodajemy element równy $c_{n+1} =\frac{\Sigma C}{2}$ \\\\
+(2.) \\
+można to w czasie wielomianowym obliczyć $O(n)$ na zmianę dodajemy \\\\
+(3.) \\
+odpowiedź to zawsze NIE, bo $3^1 + 3^2 + ... + 3^{n-1} < 3^n$ więc nie da się podzielić na dwie równe połówki. \\\\
+(4.) \\
+mnożymy wszystkie liczby w zbiorze * 3 \\\\
+(5.) \\
+jeśli $n = 3k+2$ to postępujemy tak jak w (1.), jeśli $n = 3k+1$ to dodajemy do zbioru element $\frac{\Sigma C}{2}-1$ i jedynkę,
+jeśli $n = 3k$ to dodajemy do zbioru element $\frac{\Sigma C}{2} + \varepsilon$ i dwie liczby $\varepsilon$, gdzie $\varepsilon$ to wielka liczba
 
 \subsection*{SL}
-zadanie SL
+
+\begin{center}
+\includegraphics[width=3cm]{jajco}
+\end{center}
+
+\begin{enumerate}
+	\item oszacuj złożoność obliczeniową SL
+	\item pokaż, że SL koloruje optymalnie wszystkie cykle
+	\item pokaż, że SL nie gwarantuje optymalnego kolorowania powyższego grafu
+	\item pokaż, że SL jest 4-absolutnie i 3-względnie aproksymacyjny dla grafów planarnych
+\end{enumerate}
+rozwiązanie: \\
+(1.) \\
+O(n+m) \\\\
+(2.) \\
+Algorytm SL po kolei od tyłu wybiera najpierw dowolny wierzchołek cyklu a potem te odsłonięte stopnia 1, potem kolorując je zachłannie 
+zawsze będziemy kolorowali wierzchołki przyległe więc nie użyjemy nadmiarowego koloru przez zły wybór. \\\\
+(3.)\\
+\begin{center}
+\includegraphics[width=3cm]{niebieske_jajca}
+\end{center}
+Przykładowe pokolorowanie do jakiego może doprowadzić SL (a jest to graf dwudzielny) \\\\
+(4.)\\
+W najgorszym przypadku usuwamy właśnie ten wierzchołek, potem znowu znajdujemy wierzchołek minimalnego stopnia, który spełnia zależność 
+$\delta \le 5$ 
+i tak dalej aż usuniemy wszystkie wierzchołki z grafu.  Grafy, które będziemy po kolei zachłannie kolorować 
+będą widziały co najwyżej 5 już pokolorowanych wierzchołków $\rightarrow$ SL da maksymalnie 6 kolorów. \\
+Biorąc pod uwagę powyższe rozważania a także fakt, że SL koloruje optymalnie grafy o $\chi = 1$ (puste),  widzimy, że 
+SL może się pomylić począwszy od grafów dwudzielnych. Wówczas może dać maksymalnie 6, zatem jest 4-aproksymacyjny oraz 3-absolutnie aproksymacyjny.
+
+\subsection*{LF}
+ \begin{center}
+\includegraphics[width=3cm]{lysy_z_tvgry}
+\end{center}
+\begin{enumerate}
+	\item oszacuj złożoność LF
+	\item udowodnij, że LF optymalnie koloruje cykle $C_4, C_5$ ale suboptymalnie $C_6$ 
+	\item wymień 4 klasy algorytmów, które LF koloruje optymalnie
+	\item wykonaj algorytm dla powyższego grafu
+	\item udowodnij, że LF nie jest aproksymacyjny, tj. nie istnieje stała c taka, że $LF(G) \leq c\chi(G)$
+	\item udowodnij, że LF jest k-bezwzględnie i l-względnie aproksymacyjny dla grafów kubicznych, ustal k i l.
+\end{enumerate}
+rozwiązanie: \\
+(1.)\\
+O(n+m) \\\\
+(2.)\\
+dla $C_4$ i $C_5$ niezależnie od tego jak pokolorujemy to zawsze będzie dobrze (można to jakoś rozrysować)
+dla $C_6$ jest możliwe:
+ \begin{center}
+\includegraphics[width=3cm]{C6_zle}
+\end{center}
+mimo, że optimum to 2 \\\\
+(3.) \\
+gwiazdy, dwugwiazdy, cykle nieparzyste, ścieżki nieparzyste, grafy dwudzielne pełne symetryczne \\\\
+(4.) \\
+ \begin{center}
+\includegraphics[width=3cm]{pokolorowany_jordan}
+\end{center}
+można uzyskać takie (nieoptymalne) pokolorowanie \\\\
+(5.) \\
+jak widać z powyższego pokolorowania, dla grafów tego typu używamy n/2 kolorów, mimo, że potrzebujemy tylko 2, czyli
+$LF(G) = O(n)$ \\\\
+(6.)
+dla grafów kubicznych na etapie kolorowania zachłannego algorytm "widzi" 3 sąsiadów, którzy mają góra 3 różne kolory, więc 
+dla grafów kubicznych $LF \leq 4$, LF optymalnie koloruje grafy puste, więc pierwszy raz może pomylić się przy $\chi(G) = 2$
+stąd wynika, że jest 2-absolutnie aproksymacyjny oraz 2-aproksymacyjny
+
+\subsection*{WZN}
+Problem ważonego zbioru niezależnego jest zdefiniowany tak: Dany jest graf G z obciążonymi wierzchołkami; zadaniem jest znalezienie
+zbioru niezależnego o maksymalnej wadze sumarycznej.  Udowodnij, że WZN $\in$ NPH oraz zaprojektuj algorytm wielomianowy 
+rozwiązujący WZN dla ścieżek. \\\\rozwiązanie:\\
+(I) \\
+przyjmując w wersji decyzyjnej WZN$_d$ próg p = k oraz wagi wierzchołków = 1 możemy rozwiązać problem k-zbiór niezależny, zatem
+WZN $\in$ NPH \\\\
+(II) \\
+zaczynamy od początku ścieżki i wyznaczamy sumę co drugiego wierzchołka, zaczynamy od drugiego wierzchołka ścieżki i wyznaczamy sumę co drugiego, 
+sprawdzamy, która suma jest większa i zwracamy
+
+\subsection*{Mały Paryż *}
+Algorytm rozwiązuje problem k-pokrycia wierzchołkowego grafu G
+\begin{lstlisting}
+def vertexcover(G,k)
+	if E(G) empty: 
+		return true
+	if k == 0:
+		return false
+	wybierz dowolne e = uv
+	return vertexcover(G - u,  k - 1) or vertexcover(G - v, k - 1)
+\end{lstlisting}
+\begin{enumerate}
+	\item jaka jest złożoność algorytmu w terminach m i k
+	\item podaj klasy grafów i wartości k, dla których vertexcover zwraca true w czasie wielomianowym
+	\item podaj klasy grafów i wartości k, dla których vertexcover zwraca true w czasie wykładniczym
+	\item rozwiąż problem VC dla poniższego grafu
+	\item dla k = 1 procedura wykonała się w czasie 15,6 milisekundy, ile zajmie dla poniższego grafu
+\end{enumerate}
+\begin{center}
+\includegraphics[width=3cm]{paryz}
+\end{center}
+rozwiązanie: \\
+(1.)\\
+$T(k) = 2T(k-1) + m = 2^{k} + m + 2(m-1) + 4(m-2) + ... + 2^{k-1} (m - k) < 2^{k} + m + 2m + 4m + 8m + ... + 2^{k-1}m = O(m2^k)$ \\\\
+(2.)\\
+gwiazdy (k = 1),  dwugwiazdy (k=2) \\\\
+(3.)\\
+ścieżki, cykle, koła, grafy pełne, dwudzielne pełne \\\\
+(4.) \\
+\begin{center}
+\includegraphics[width=3cm]{paryz_rozw}
+\end{center}
+k=7 \\\\
+(5.)
+$t = 2^6 * 15,6 = 998,1$ ms  
 
 \section{Dowody grafowe}
 
@@ -1232,22 +1489,6 @@ tak, $\chi(G) \leq 4$
 Udowodnij tw. Vizinga: $\Delta \leq \chi^, \leq \Delta + 1$
 
 \section{Trudne zadania}
-\subsection*{Pokrycie wierzchołkowe *}
-Algorytm rozwiązuje problem k-pokrycia wierzchołkowego grafu G
-\begin{lstlisting}
-def vertexcover(G,k)
-	if E(G) empty: 
-		return true
-	if k == 0:
-		return false
-	wybierz dowolne e = uv
-	return vertexcover(G - u,  k - 1) or vertexcover(G - v, k - 1)
-\end{lstlisting}
-\begin{enumerate}
-	\item jaka jest złożoność algorytmu w terminach m i k
-	\item podaj typy grafów i wartości k, dla których vertexcover zwraca true w czasie wielomianowym
-	\item podaj typy grafów i wartości k, dla których vertexcover zwraca false w czasie wykładniczym
-\end{enumerate}
 
 \subsection*{MFP}
 W historii problemu maksymalnego przepływu znane są m.in.  następujące algorytmy:\\
@@ -1268,15 +1509,6 @@ trzeba rozpatrzeć dwa przypadki: 1. grafy rzadkie, 2. grafy gęste i średnio g
 Zaproponuj listowy sposób reprezentacji drzew n-wierzchołkowych w pamięci O(n) umożliwiający sprawdzanie O(1), 
 czy para wierzchołków jest połączona krawędzią. 
 
-\subsection*{Minimalne rozcięcie}
-Problem Minimalne Rozcięcie pyta jak równo podzielić wierzchołki grafu, tak aby zminimalizować liczbę krawędzi łączących wierzchołki z różnych podzbiorów.
-Najszybszy znany algorytm dla problemu MR ma złożoność $O(2^{O(kkk}n^3log^3n)$ gdzie k jest rozmiarem minimalnego cięcia. Jaka jest najszersza klasa grafów, 
-dla której problem MR jest wielomianowy? Jaki jest wówczas zwiącek pomiędzy k i n? Jaka jest wówczas złożoność wspomnianego algorytmu? \\\\rozwiązanie:\\
-jakie to mogą być klasy? \\
-$K_{p,q}$: k = 0, T = $O(n^3log^3n)$ \\
-$T_n$: k = 1,  T = $O(n^3log^3n)$ \\
-$Q_p$: $k = logn$, T = $O(n^6log^3n)$ \\
-$N_n$: $k = 0$
 
 
 \end{document}

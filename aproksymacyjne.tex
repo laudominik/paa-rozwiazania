@@ -70,6 +70,10 @@ jeśli dla każdego $\varepsilon > 0$ zachodzi
 \textbf{EPTAS} - schemat wielomianowy względem n, w którym $\varepsilon$ nie jest w potędze n \\
 \textbf{FPTAS} - schemat wielomianowy względem rozmiaru  i $\frac{1}{\varepsilon}$, np. $O((\frac{1}{\varepsilon})^2n)$
 
+\subsection{Problemy silnie NP-trudne}
+Jest to problem, dla którego istnieje jego podproblem,  który jest również NP-trudny.
+Dla takich aglorytmów nie ma FPTAS.
+
 \section{Przykłady algorytmów aproksymacyjnych}
 
 \textbf{NaiveColor} - przybliżone kolorowanie krawędzi
@@ -114,8 +118,7 @@ def ChromaticNumberPlanar(G):
 	return 4
 \end{lstlisting}
 jest to algorytm 1-absolutnie aproksymacyjny - czasem mylimy się o jeden kolor (jeśli $\chi = 3$) oraz $\frac{4}{3}$-aproksymacyjny \\\\
-
-\textbf{podstawowy algorytm do rozwiązywania TSP}
+\textbf{podstawowy algorytm do rozwiązywania problemu komiwojażera}
 
 \begin{lstlisting}
 def TSP_approx(G):
